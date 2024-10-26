@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Prediction</title>
+    <style>
+        html {
+            height: 100%;
+            background-image: url("/static/pic.gif");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px; /* Adjust padding as needed */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        .container {
+            text-align: center;
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            color: #333;
+            background-color: #fafafa;
+        }
+        input[type="button"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            color: #fff;
+            background-color: #007bff;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        input[type="button"]:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+            background-color: #fafafa;
+            padding: 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1>Language Prediction</h1>
+            <form id="languageForm">
+                <label for="text">Enter a text:</label><br>
+                <input type="text" id="text" name="text"><br><br>
+                <input type="button" value="Predict" id="predictButton">
+            </form>
+            <div class="result" id="result"></div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var predictButton = document.getElementById('predictButton');
+            predictButton.addEventListener('click', predictLanguage);
+        });
+
+        function predictLanguage() {
+            var text = document.getElementById("text").value.trim();
+            if (text === '') {
+                alert("Please enter a text.");
+                return;
+            }
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("result").innerHTML = "<b>Predicted language:</b> " + this.responseText.trim();
+                }
+            };
+            xhttp.open("POST", "/predict", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("text=" + text);
+        }
+    </script>
+</body>
+</html>
